@@ -37,8 +37,8 @@ app.post('/api/chat', async (req, res) => {
 const distPath = path.resolve(__dirname, 'dist');
 app.use(express.static(distPath));
 
-// SPA fallback to index.html (Express 5 requires '/*' instead of '*')
-app.get('/*', (req, res) => {
+// SPA fallback to index.html using regex for Express 5 compatibility
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
