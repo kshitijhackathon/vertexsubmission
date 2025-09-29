@@ -1,9 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import fetch from 'node-fetch';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
-const PORT = process.env.PORT || 5174; // separate from vite default
+const PORT = process.env.PORT || 5174; // Render provides PORT
+
+// Resolve dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
@@ -27,8 +33,17 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
+// Serve built frontend from /dist when running in production
+const distPath = path.resolve(__dirname, 'dist');
+app.use(express.static(distPath));
+
+// SPA fallback to index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
+
 app.listen(PORT, () => {
-  console.log(`Proxy server running on http://localhost:${PORT}`);
+  console.log(`Server listening on 0.0.0.0:${PORT}`);
 });
 
 
