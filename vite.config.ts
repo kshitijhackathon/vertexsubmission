@@ -7,4 +7,8 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  server: {
+    host: true,  // 0.0.0.0 pe bind kare
+    port: 5173    // tumhara desired port
+  }
 });
